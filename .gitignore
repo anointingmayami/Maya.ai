@@ -10,6 +10,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
+maya_cli/setup.py
 dist/
 downloads/
 eggs/

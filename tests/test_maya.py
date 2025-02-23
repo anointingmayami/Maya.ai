@@ -2,8 +2,8 @@ import os
 import shutil
 import pytest
 from click.testing import CliRunner
-from maya_cli.cli import maya
-from maya_cli.project_generator import PROJECT_STRUCTURE
+from ..maya_cli.cli import maya
+from ..maya_cli.project_generator import PROJECT_STRUCTURE
 
 TEST_PROJECT_NAME = "test_ai_project"
 

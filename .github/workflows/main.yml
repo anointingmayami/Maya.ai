@@ -28,7 +28,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -e .  # Install package in editable mode
+          if [ -f "setup.py" ] || [ -f "pyproject.toml" ]; then
+            pip install -e .
+          fi
           pip install pytest
 
       - name: Verify Tests Directory Exists
@@ -59,6 +61,13 @@ jobs:
       - name: Install build dependencies
         run: pip install setuptools wheel build
 
+      - name: Verify Packaging Files Exist
+        run: |
+          if [ ! -f "setup.py" ] && [ ! -f "pyproject.toml" ]; then
+            echo "❌ ERROR: Neither 'setup.py' nor 'pyproject.toml' found!"
+            exit 1
+          fi
+
       - name: Build Distribution Files
         run: python -m build
 
@@ -72,7 +81,7 @@ jobs:
     name: Publish to PyPI
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'release'
+    if: github.event_name == 'release' && success()
 
     steps:
       - name: Checkout Repository
@@ -91,6 +100,13 @@ jobs:
         with:
           name: maya-cli-package
           path: dist
+
+      - name: Verify Package Files
+        run: |
+          if [ ! -f "dist/*.tar.gz" ] && [ ! -f "dist/*.whl" ]; then
+            echo "❌ ERROR: No package files found in 'dist/'"
+            exit 1
+          fi
 
       - name: Publish to PyPI
         env:

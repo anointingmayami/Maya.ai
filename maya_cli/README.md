@@ -39,14 +39,14 @@ maya check_best_practices api my_script.py
 ### 3. Set Environment Variable
 #### Command:
 ```sh
-maya set_env <key> <value>
+maya set-env <key> <value>
 ```
 #### Description:
 Sets a key-value pair in the `.env` file.
 
 #### Example:
 ```sh
-maya set_env OPENAI_API_KEY my_api_key
+maya set-env OPENAI_API_KEY my_api_key
 ```
 
 ### 4. Optimize AI Scripts

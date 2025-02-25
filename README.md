@@ -8,6 +8,17 @@ Maya.ai is an AI architectural framework designed to ensure ethical, optimized, 
 - Provides a scalable framework for AI research and business applications
 - Includes Maya CLI for quick AI project setup
 
+## 🆕 New Release Features
+Maya CLI has been updated with new features to enhance AI project development. The latest version introduces:
+- **Enhanced Project Templates**: More predefined templates for diverse AI applications.
+- **Versioning Support**: Track and manage different versions of AI projects.
+- **Improved Compliance Checks**: Automatic compliance validation for ethical AI development.
+- **Extended API Integrations**: Seamless connection with external AI services.
+
+### 🔗 Read the Full Documentation
+For a detailed breakdown of the new features and CLI commands, check out our official documentation:
+[View Documentation](#)
+
 ## 🛠 Maya CLI - AI Project Generator
 Maya CLI is one of the core features of Maya.ai, designed to generate structured AI project templates. It helps AI developers quickly set up their projects with predefined folders and files, ensuring organization and scalability.
 

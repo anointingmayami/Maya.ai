@@ -1,93 +1,134 @@
-﻿# Maya.ai - AI Architectural Framework
+﻿# Maya CLI - Developer Documentation
 
-Maya.ai is an AI architectural framework designed to ensure ethical, optimized, and compliant AI integration in business and research applications. The framework provides guidance on AI ethics, compliance, business strategy, and AI-driven education while fostering innovation.
+## Overview
+Maya CLI is a command-line interface (CLI) designed to assist in AI project generation, optimization, security enforcement, and best practices validation. This documentation provides a guide on how to use each CLI command effectively.
 
-## ðŸŒŸ Features
-- Ensures structured AI project development
-- Promotes ethical and compliant AI integration
-- Provides a scalable framework for AI research and business applications
-- Includes Maya CLI for quick AI project setup
-
-## ðŸ›  Maya CLI - AI Project Generator
-Maya CLI is one of the core features of Maya.ai, designed to generate structured AI project templates. It helps AI developers quickly set up their projects with predefined folders and files, ensuring organization and scalability.
-
-### ðŸ“¦ Installation Guide (For Dummies)
-
-#### Step 1: Install Python
-Maya CLI requires Python. To install Python:
-- Download the latest version of Python from [python.org](https://www.python.org/downloads/)
-- Run the installer and ensure "Add Python to PATH" is checked
-- Verify installation by running:
-  ```sh
-  python --version
-  ```
-
-#### Step 2: Install Virtual Environment (Optional but Recommended)
-Using a virtual environment helps manage dependencies. Install it using:
+## Installation
+Before using Maya CLI, ensure that the required dependencies are installed:
 ```sh
-pip install virtualenv
-```
-To create and activate a virtual environment:
-```sh
-virtualenv venv
-source venv/bin/activate  # On macOS/Linux
-venv\Scripts\activate     # On Windows
+pip install -r requirements.txt
 ```
 
-#### Step 3: Install Maya CLI
-Maya CLI is available on PyPI. Install it using pip:
-```sh
-pip install maya-cli
-```
-
-### ðŸš€ Usage
-Once installed, use the following command to create a new AI project:
+## Commands
+### 1. Create a New AI Project
+#### Command:
 ```sh
 maya create <project_name>
 ```
-Example:
+#### Description:
+Creates a new AI project structure.
+
+#### Example:
 ```sh
 maya create my_ai_project
 ```
-This will generate the following structure:
+
+### 2. Check Best Practices
+#### Command:
+```sh
+maya check_best_practices [folder] [filename]
 ```
-my_ai_project/
-â”‚â”€â”€ data_source/
-â”‚   â”œâ”€â”€ ingestion/
-â”‚   â”œâ”€â”€ processing/
-â”‚   â”œâ”€â”€ storage/
-â”‚â”€â”€ knowledge_base/
-â”‚   â”œâ”€â”€ models/
-â”‚   â”œâ”€â”€ training/
-â”‚   â”œâ”€â”€ evaluation/
-â”‚â”€â”€ ai_governance/
-â”‚   â”œâ”€â”€ compliance/
-â”‚   â”œâ”€â”€ fairness/
-â”‚   â”œâ”€â”€ monitoring/
-â”‚â”€â”€ api/
-â”‚   â”œâ”€â”€ endpoints/
-â”‚   â”œâ”€â”€ authentication/
-â”‚â”€â”€ tests/
-â”‚â”€â”€ docs/
-â”‚â”€â”€ scripts/
-â”‚â”€â”€ configs/
+#### Description:
+Validates Python code against best practices.
+
+#### Example:
+```sh
+maya check_best_practices api my_script.py
 ```
 
-### ðŸ›  API Documentation
-#### CLI Commands
-##### `maya create <project_name>`
-Creates a new AI project structure with organized folders.
+### 3. Set Environment Variable
+#### Command:
+```sh
+maya set_env <key> <value>
+```
+#### Description:
+Sets a key-value pair in the `.env` file.
 
-#### `project_generator.py`
-##### `create_project_structure(base_path, structure)`
-Recursively creates folders based on the defined project structure.
+#### Example:
+```sh
+maya set_env OPENAI_API_KEY my_api_key
+```
 
-## ðŸ“œ License
-This project is licensed under the MIT License.
+### 4. Optimize AI Scripts
+#### Command:
+```sh
+maya optimize [target]
+```
+#### Description:
+Optimizes AI scripts with caching and async processing.
 
-## ðŸ¤ Contributing
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+#### Example:
+```sh
+maya optimize my_project
+```
 
-## ðŸ“ž Support
-For any issues, contact the developers via GitHub or raise an issue in the repository.
+### 5. Enforce API Security
+#### Command:
+```sh
+maya isSecured <target> [filename]
+```
+#### Description:
+Checks and enforces API security measures including authentication, encryption, and rate limiting.
 
+#### Example:
+```sh
+maya isSecured api my_api.py
+```
+
+### 6. Check Code Ethics
+#### Command:
+```sh
+maya check_ethics <target> [filename]
+```
+#### Description:
+Validates code efficiency, accuracy, and best practices.
+
+#### Example:
+```sh
+maya check_ethics my_project
+```
+
+### 7. Generate Documentation
+#### Command:
+```sh
+maya doc <target> <filename>
+```
+#### Description:
+Generates a `README.md` documentation for the given file.
+
+#### Example:
+```sh
+maya doc api my_script.py
+```
+
+### 8. Generate Codex Report
+#### Command:
+```sh
+maya codex <target> <filename>
+```
+#### Description:
+Provides an in-depth analysis and recommendations for the given file.
+
+#### Example:
+```sh
+maya codex ai_model model.py
+```
+
+### 9. Enforce Compliance & Regulation
+#### Command:
+```sh
+maya regulate <target> [filename]
+```
+#### Description:
+Ensures compliance with GDPR, CCPA, AI Act, and ISO 42001 AI governance standards.
+
+#### Example:
+```sh
+maya regulate my_project
+```
+
+## Logging
+Maya CLI logs all operations in `maya_cli.log`. Check this file for debugging and issue tracking.
+
+## Contact
+For support or feature requests, reach out to the development team via GitHub or email.

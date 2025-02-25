@@ -17,7 +17,7 @@ Maya CLI has been updated with new features to enhance AI project development. T
 
 ### 🔗 Read the Full Documentation
 For a detailed breakdown of the new features and CLI commands, check out our official documentation:
-[View Documentation](#)
+[View Documentation](https://github.com/anointingmayami/Maya.ai/blob/main/maya_cli/README.md)
 
 ## 🛠 Maya CLI - AI Project Generator
 Maya CLI is one of the core features of Maya.ai, designed to generate structured AI project templates. It helps AI developers quickly set up their projects with predefined folders and files, ensuring organization and scalability.

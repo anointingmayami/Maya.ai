@@ -26,27 +26,27 @@ maya create my_ai_project
 ### 2. Check Best Practices
 #### Command:
 ```sh
-maya check_best_practices [folder] [filename]
+maya check-best-practices [folder] [filename]
 ```
 #### Description:
 Validates Python code against best practices.
 
 #### Example:
 ```sh
-maya check_best_practices api my_script.py
+maya check-best-practices api my_script.py
 ```
 
 ### 3. Set Environment Variable
 #### Command:
 ```sh
-maya set_env <key> <value>
+maya set-env <key> <value>
 ```
 #### Description:
 Sets a key-value pair in the `.env` file.
 
 #### Example:
 ```sh
-maya set_env OPENAI_API_KEY my_api_key
+maya set-env OPENAI_API_KEY my_api_key
 ```
 
 ### 4. Optimize AI Scripts
@@ -78,14 +78,14 @@ maya isSecured api my_api.py
 ### 6. Check Code Ethics
 #### Command:
 ```sh
-maya check_ethics <target> [filename]
+maya check-ethics <target> [filename]
 ```
 #### Description:
 Validates code efficiency, accuracy, and best practices.
 
 #### Example:
 ```sh
-maya check_ethics my_project
+maya check-ethics my_project
 ```
 
 ### 7. Generate Documentation

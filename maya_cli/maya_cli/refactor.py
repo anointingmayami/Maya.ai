@@ -45,8 +45,8 @@ def write_file(file_path, content):
     except Exception as e:
         error_msg = f"❌ Error writing {file_path}: {str(e)}"
     
-    logging.error(error_msg)
-    click.echo(error_msg)
+        logging.error(error_msg)
+        click.echo(error_msg)
 
 def refactor_code_with_openai(code):
     """Sends code to OpenAI for best-practices refactoring."""
@@ -75,14 +75,15 @@ def refactor_code_with_openai(code):
         optimized_code = response["choices"][0]["message"]["content"].strip()
         logging.debug(f"OpenAI API response received successfully.")
         return optimized_code
-    except openai.error.OpenAIError as e:
+    except openai.OpenAIError as e:  # Corrected
         error_msg = f"❌ OpenAI API Error: {str(e)}"
     except Exception as e:
         error_msg = f"❌ Unexpected Error: {str(e)}"
-    
+
     logging.error(error_msg)
     click.echo(error_msg)
     return code  # Return original code if API call fails
+
 
 def process_directory(directory, filename=None):
     """Scans the given directory and refactors specified files."""

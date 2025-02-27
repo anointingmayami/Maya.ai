@@ -3,6 +3,63 @@
 ## Overview
 Maya CLI is a command-line interface (CLI) designed to assist in AI project generation, optimization, security enforcement, and best practices validation. This documentation provides a guide on how to use each CLI command effectively.
 
+# Quick Guide to Getting Started with Maya AI
+
+## Step 1: Installation and Setup Development Environment
+To begin using Maya AI, you need to set up your development environment. Follow these steps:
+
+1. Ensure you have Python installed (preferably Python 3.8+).
+2. Install the required dependencies using pip:
+   ```sh
+   pip install click python-dotenv openai
+   ```
+3. Clone the Maya AI repository (if applicable) or set up your project directory.
+
+## Step 2: Set Up OpenAI Key in Environment Variables
+To integrate OpenAI services, you must configure your API key in an `.env` file:
+
+1. Create a `.env` file in your project directory.
+2. Use the `set_env` command to store your OpenAI API key:
+   ```sh
+   maya set-env OPENAI_API_KEY your_api_key_here
+   ```
+   This command will securely save your key in the `.env` file.
+
+## Step 3: Create a Maya AI Project
+Once the environment is set up, you can create a new AI project using the Maya CLI:
+
+1. Run the following command to create a new project:
+   ```sh
+   maya create your_project_name
+   ```
+2. This will generate the necessary project structure for your AI application.
+3. Navigate into your project directory and start developing.
+
+## Additional Maya AI CLI Commands
+- **Check Best Practices:**
+  ```sh
+  maya check-best-practices path_to_project
+  ```
+  Ensures your project follows AI development best practices.
+
+- **Optimize a File:**
+  ```sh
+  maya optimize parent_folder sub_folder filename
+  ```
+  Automatically imports optimization scripts to improve performance.
+
+- **Check API Security:**
+  ```sh
+  maya is-secured parent_folder sub_folder filename
+  ```
+  Runs an AI-based security check on your API implementations.
+
+- **Check Code Ethics:**
+  ```sh
+  maya check-ethics parent_folder sub_folder filename
+  ```
+  Reviews code for efficiency, accuracy, and ethical standards.
+
 ## Installation
 Before using Maya CLI, ensure that the required dependencies are installed:
 ```sh

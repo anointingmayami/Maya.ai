@@ -84,6 +84,39 @@ my_ai_project/
 │── configs/
 ```
 
+# Quick Guide to Getting Started with Maya AI
+
+## Step 1: Installation and Setup Development Environment
+To begin using Maya AI, you need to set up your development environment. Follow these steps:
+
+1. Ensure you have Python installed (preferably Python 3.8+).
+2. Install the required dependencies using pip:
+   ```sh
+   pip install click python-dotenv openai
+   ```
+3. Clone the Maya AI repository (if applicable) or set up your project directory.
+
+## Step 2: Set Up OpenAI Key in Environment Variables
+To integrate OpenAI services, you must configure your API key in an `.env` file:
+
+1. Create a `.env` file in your project directory.
+2. Use the `set_env` command to store your OpenAI API key:
+   ```sh
+   maya set-env OPENAI_API_KEY your_api_key_here
+   ```
+   This command will securely save your key in the `.env` file.
+
+## Step 3: Create a Maya AI Project
+Once the environment is set up, you can create a new AI project using the Maya CLI:
+
+1. Run the following command to create a new project:
+   ```sh
+   maya create your_project_name
+   ```
+2. This will generate the necessary project structure for your AI application.
+3. Navigate into your project directory and start developing.
+
+
 ### 🛠 API Documentation
 #### CLI Commands
 ##### `maya create <project_name>`

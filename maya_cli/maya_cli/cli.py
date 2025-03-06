@@ -8,6 +8,7 @@ import openai
 from .project_generator import create_project_structure, PROJECT_STRUCTURE
 from .refactor import process_directory
 from maya_cli.scripts import optimize  # This will trigger optimize_event_handler automatically
+import subprocess
 
 
 # Setup logging
@@ -21,6 +22,107 @@ logging.basicConfig(
 # Load environment variables from .env
 load_dotenv()
 
+# ✅ Function to check if OPENAI_API_KEY is set before executing commands
+def require_openai_key():
+    """Ensure the OpenAI API key is set before executing commands."""
+    api_key = get_openai_key()
+
+    if not api_key:
+        logging.error("❌ OPENAI_API_KEY is not set. Please set it before proceeding.")
+        print("❌ OPENAI_API_KEY is not set. Please set it before proceeding.")
+        oak = input("Enter OPENAI_API_KEY: ").strip()
+
+        if not oak:
+            print("❌ No API key provided. Exiting.")
+            sys.exit(1)
+
+        set_env_func("OPENAI_API_KEY", oak)  # Call set_env to save the key
+
+        verify_openai_key()  
+
+    verify_openai_key()  
+
+def get_openai_key():
+    """Retrieve the OpenAI API key, checking multiple sources."""
+    api_key = os.getenv("OPENAI_API_KEY")  # Check normal env first
+
+    if not api_key:
+        # ✅ Force fetch from User-level env variables in Windows
+        if os.name == "nt":
+            api_key = subprocess.run(
+                ["powershell", "-Command",
+                 '[System.Environment]::GetEnvironmentVariable("OPENAI_API_KEY", "User")'],
+                capture_output=True, text=True
+            ).stdout.strip()
+
+    return api_key
+
+# ✅ CLI Command to set environment variables
+@click.command()
+@click.argument("key")
+@click.argument("value")
+def set_env(key, value):
+    set_env_func(key, value)
+    
+def set_env_func(key, value):
+    """Set an environment variable in .env file."""
+    env_file = ".env"
+
+    try:
+        if not os.path.exists(env_file):
+            with open(env_file, "w") as f:
+                f.write("# Maya CLI Environment Variables\n")
+            logging.info("Created new .env file.")
+
+        set_key(env_file, key, value)
+        
+        # ✅ Set environment variable for current session
+        os.environ[key] = value
+
+         # ✅ Set environment variable permanently (Windows & Linux/Mac)
+        if os.name == "nt":  # Windows
+            os.system(f'setx {key} "{value}"')
+
+            # Set for PowerShell (User Scope)
+            subprocess.run(["powershell", "-Command",
+                            f'[System.Environment]::SetEnvironmentVariable("{key}", "{value}", "User")'])
+
+            # ✅ Immediately update PowerShell session so $env:OPENAI_API_KEY works instantly
+            subprocess.run(["powershell", "-Command",
+                            f'$env:{key} = "{value}"'])
+
+            print(f"✅ Environment variable '{key}' set successfully for CMD & PowerShell!")
+
+        else:  # Linux/Mac
+            os.system(f'export {key}="{value}"')
+
+        click.echo(f"✅ Environment variable '{key}' set successfully!")
+        logging.info(f"Set environment variable: {key}={value}")
+
+    except Exception as e:
+        logging.error(f"Error setting environment variable {key}: {str(e)}")
+        click.echo(f"❌ Error setting environment variable: {str(e)}")
+
+# ✅ Function to verify OpenAI API key is set
+def verify_openai_key():
+    """Check if OPENAI_API_KEY is set in environment variables."""
+    openai_key = os.getenv("OPENAI_API_KEY")
+    if not openai_key:
+        logging.error("OPENAI_API_KEY is not set. Please set it before proceeding.")
+        return False
+    pass
+
+# ✅ Function to execute CLI commands
+def execute_maya_cli_command(command):
+    """Executes a CLI command after verifying the OpenAI API key."""
+    if not verify_openai_key():
+        return
+    
+    try:
+        result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
+        logging.info("Command Output:\n%s", result.stdout.strip())
+    except subprocess.CalledProcessError as e:
+        logging.error("Error executing command: %s", e.stderr.strip())
 
 @click.group()
 def maya():
@@ -31,6 +133,7 @@ def maya():
 @click.command()
 @click.argument("project_name")
 def create(project_name):
+    require_openai_key()
     """Create a new AI project structure"""
     try:
         base_path = os.path.join(os.getcwd(), project_name)
@@ -48,9 +151,11 @@ def create(project_name):
         logging.error(f"Error while creating project: {str(e)}")
         click.echo(f"❌ An error occurred: {str(e)}")
 
+
 @click.command()
 @click.argument("path", nargs=-1, required=True)
 def check_best_practices(path):
+    require_openai_key()
     """CLI Command: maya check-best-practices [folder] [sub-folder] ... [filename]"""
     click.echo("🚀 Running Best Practices Check...")
     
@@ -71,33 +176,12 @@ def check_best_practices(path):
     
     click.echo("✅ Best practices check completed!")
 
-
-@click.command()
-@click.argument("key")
-@click.argument("value")
-def set_env(key, value):
-    """Set an environment variable in .env file"""
-    env_file = ".env"
-    
-    try:
-        if not os.path.exists(env_file):
-            with open(env_file, "w") as f:
-                f.write("# Maya CLI Environment Variables\n")
-            logging.info("Created new .env file.")
-
-        set_key(env_file, key, value)
-        click.echo(f"✅ Environment variable '{key}' set successfully!")
-        logging.info(f"Set environment variable: {key}={value}")
-
-    except Exception as e:
-        logging.error(f"Error setting environment variable {key}: {str(e)}")
-        click.echo(f"❌ Error setting environment variable: {str(e)}")
-
 @click.command()
 @click.argument("parent_folder", required=True)
 @click.argument("sub_folder", required=True)
 @click.argument("filename", required=True)
 def optimize(parent_folder, sub_folder, filename):
+    require_openai_key()
     """Optimize a file by importing optimize.py from maya_cli.scripts."""
     
     # Construct the full file path
@@ -136,17 +220,13 @@ def inject_import(filepath):
         logging.error(f"Error injecting import into '{filepath}': {str(e)}")
         click.echo(f"❌ Error injecting import into '{filepath}': {str(e)}")
 
-import os
-import json
-import click
-import logging
-import openai
 
 @click.command()
 @click.argument("parent_folder", required=True)
 @click.argument("sub_folder", required=True)
 @click.argument("filename", required=True)
 def is_secured(parent_folder, sub_folder, filename):
+    require_openai_key()
     """Check and enforce API security measures: Authentication, Encryption, and Rate Limiting."""
     click.echo("🔍 Running API Security Check...")
 
@@ -243,11 +323,13 @@ def apply_rate_limiting(filepath):
     with open(filepath, "a", encoding="utf-8") as f:
         f.write("\n# TODO: Enforce API Rate Limiting & Quotas\n")
 
+
 @click.command()
 @click.argument("parent_folder", required=True)
 @click.argument("sub_folder", required=True)
 @click.argument("filename", required=False)
 def check_ethics(parent_folder, sub_folder, filename=None):
+    require_openai_key()
     """Check code for efficiency, accuracy, and best practices."""
     click.echo("\U0001F50D Running Code Ethics Check...")
     ethics_issues = []
@@ -332,11 +414,13 @@ def validate_ethics_with_ai(code):
         logging.error(f"Error in AI validation: {str(e)}")
         return {"efficiency": False, "accuracy": False, "best_practices": False}
 
+
 @click.command()
 @click.argument("parent_folder")
 @click.argument("sub_folder")
 @click.argument("filename")
 def doc(parent_folder, sub_folder, filename):
+    require_openai_key()
     """Generate README.md documentation for the given file."""
     click.echo("📄 Generating Documentation...")
 
@@ -377,11 +461,13 @@ def generate_documentation(code):
     """Generate structured documentation based on the given Python code."""
     return f"# Auto-Generated Documentation\n\n```python\n{code}\n```"
 
+
 @click.command()
 @click.argument("parent_folder")
 @click.argument("sub_folder")
 @click.argument("filename", required=False)
 def codex(parent_folder, sub_folder, filename=None):
+    require_openai_key()
     """Provide in-depth analysis and recommendations for a file or all Python files in a directory."""
     click.echo("📚 Creating Code Codex Report...")
 
@@ -431,11 +517,15 @@ def generate_codex_report(code):
     """Generate an in-depth analysis and recommendations based on the given Python code."""
     return f"# Code Analysis & Recommendations\n\n```python\n{code}\n```\n\n## Recommendations:\n- Improve efficiency\n- Enhance readability\n- Optimize performance\n"
 
+
 @click.command()
 @click.argument("parent_folder")
 @click.argument("sub_folder")
 @click.argument("filename", required=False)
 def regulate(parent_folder, sub_folder, filename=None):
+    # Ensure OpenAI API key is available before running logic
+    require_openai_key()
+
     """Ensure code compliance with GDPR, CCPA, AI Act, and ISO 42001 AI governance standards."""
     click.echo("🔍 Running Compliance & Regulation Check...")
 
@@ -552,7 +642,7 @@ def generate_compliance_report(filepath, feedback):
 🛠 *Generated by Compliance Checker*
 """
 
-# Add commands to Maya CLI
+# ✅ Add commands to Maya CLI
 maya.add_command(is_secured)
 maya.add_command(check_ethics)
 maya.add_command(doc)
@@ -563,5 +653,10 @@ maya.add_command(check_best_practices)
 maya.add_command(set_env)
 maya.add_command(optimize)
 
+# ✅ Run CLI
 if __name__ == "__main__":
-    maya()
+    try:
+        maya()
+    except Exception as e:
+        logger.exception("Unexpected error: %s", str(e))
+        sys.exit(1)

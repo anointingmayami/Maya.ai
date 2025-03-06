@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="maya-cli",
-    version="0.1.3",
+    version="0.1.4",
     author="King Anointing Joseph Mayami",
     author_email="anointingmayami@gmail.com",
     description="Maya CLI - AI Project Generator",
